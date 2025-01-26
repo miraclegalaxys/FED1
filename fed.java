@@ -40,10 +40,10 @@ public class fed {
         try (FileInputStream fis = new FileInputStream(inputFile);
              FileOutputStream fos = new FileOutputStream(outputFile)) {
             
-            // Write IV
+            // เขียน IV ลงในไฟล์ปลายทางที่ Encrypt
             fos.write(iv.getIV());
             
-            // Encrypt file content
+            // Encrypt ไฟล์
             try (CipherOutputStream cos = new CipherOutputStream(fos, cipher)) {
                 byte[] buffer = new byte[BUFFER_SIZE];
                 long totalBytes = inputFile.length();
@@ -58,6 +58,39 @@ public class fed {
                 }
             }
             System.out.println("\nFile encrypted successfully: " + outputFile.getPath());
+        }
+    }
+
+    public static void decryptFile(File inputFile, File outputFile, SecretKey secretKey) throws Exception {
+        if (!inputFile.exists()) {
+            throw new FileNotFoundException("Input file not found: " + inputFile.getPath());
+        }
+        
+        try (FileInputStream fis = new FileInputStream(inputFile)) {
+            // อ่าน IV
+            byte[] ivBytes = new byte[IV_LENGTH];
+            fis.read(ivBytes);
+            IvParameterSpec iv = new IvParameterSpec(ivBytes);
+            
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+            
+            try (FileOutputStream fos = new FileOutputStream(outputFile);
+                 CipherOutputStream cos = new CipherOutputStream(fos, cipher)) {
+                
+                byte[] buffer = new byte[BUFFER_SIZE];
+                long totalBytes = inputFile.length() - IV_LENGTH;
+                long processedBytes = 0;
+                int bytesRead;
+                
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    cos.write(buffer, 0, bytesRead);
+                    processedBytes += bytesRead;
+                    int progress = (int) ((processedBytes * 100) / totalBytes);
+                    System.out.print("\rDecrypting: " + progress + "%");
+                }
+            }
+            System.out.println("\nFile decrypted successfully: " + outputFile.getPath());
         }
     }
 
@@ -93,7 +126,8 @@ public class fed {
 
             File inputFile = new File(inputFilePath);
             File outputFile = new File(outputFilePath);
-            encryptFile(inputFile, outputFile, secretKey);
+            // encryptFile(inputFile, outputFile, secretKey);
+            decryptFile(inputFile, outputFile, secretKey);
 
         } catch (Exception e) {
             System.out.println("\nAn error occurred: " + e.getMessage());
