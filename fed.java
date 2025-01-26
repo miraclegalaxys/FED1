@@ -131,6 +131,14 @@ public class fed {
             // encryptFile(inputFile, outputFile, secretKey);
             // decryptFile(inputFile, outputFile, secretKey);
 
+            if (outputFile.exists()) {
+                System.out.print("Output file exists. Overwrite? (Y/N): ");
+                if (!console.readLine().equalsIgnoreCase("Y")) {
+                    System.out.println("Operation cancelled");
+                    return;
+                }
+            }
+
             if (mode.equals("encrypt")) {
                 encryptFile(inputFile, outputFile, secretKey);
             } else if (mode.equals("decrypt")) {
