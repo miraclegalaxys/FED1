@@ -118,7 +118,9 @@ public class fed {
             // IvParameterSpec iv = generateIv();
             // String encodedIv = Base64.getEncoder().encodeToString(iv.getIV());
             // System.out.println("IV generated successfully (Base64): " + encodedIv);
-
+            
+            System.out.print("Enter mode (encrypt/decrypt): ");
+            String mode = console.readLine().toLowerCase();
             System.out.print("Enter input file path: ");
             String inputFilePath = console.readLine();
             System.out.print("Enter output file path: ");
@@ -127,7 +129,15 @@ public class fed {
             File inputFile = new File(inputFilePath);
             File outputFile = new File(outputFilePath);
             // encryptFile(inputFile, outputFile, secretKey);
-            decryptFile(inputFile, outputFile, secretKey);
+            // decryptFile(inputFile, outputFile, secretKey);
+
+            if (mode.equals("encrypt")) {
+                encryptFile(inputFile, outputFile, secretKey);
+            } else if (mode.equals("decrypt")) {
+                decryptFile(inputFile, outputFile, secretKey);
+            } else {
+                System.out.println("Invalid mode. Please enter 'encrypt' or 'decrypt'.");
+            }
 
         } catch (Exception e) {
             System.out.println("\nAn error occurred: " + e.getMessage());
