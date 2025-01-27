@@ -5,7 +5,7 @@ import javax.crypto.CipherOutputStream;
 import java.security.MessageDigest;
 import java.io.*;
 import java.util.Arrays;
-import java.util.Base64;
+// import java.util.Base64;
 
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
@@ -102,7 +102,15 @@ public class fed {
         }
 
         try {
-            System.out.println("=== File Encryption Tool ===");
+            System.out.println("\n" +
+                "███████╗███████╗██████╗  ██╗\n" +
+                "██╔════╝██╔════╝██╔══██╗███║\n" +
+                "█████╗  █████╗  ██║  ██║╚██║\n" +
+                "██╔══╝  ██╔══╝  ██║  ██║ ██║\n" +
+                "██║     ███████╗██████╔╝ ██║\n" +
+                "╚═╝     ╚══════╝╚═════╝  ╚═╝\n");
+            System.out.println("=== File Encryption/Decryption Tool ===\n");
+
 
             // รับ password จากผู้ใช้งาน
             char[] passwordChars = console.readPassword("Enter password: ");
